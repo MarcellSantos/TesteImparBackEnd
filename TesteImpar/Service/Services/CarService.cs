@@ -27,9 +27,9 @@ namespace TesteImpar.Service.Services
             await this._repository.FindAll();
         }
 
-        public async Task<List<Car>> ListCarPerPage(int Page=0,int step=10)
+        public async Task<List<Car>> ListCarPerPage(int Page=0,int step=10, string title = "")
         {
-            return this._repository.Queryable()
+            return this._repository.Queryable().Where(x => ((title == "") ? true : x.Name.Contains(title)))//caso tenha termo de procura filtra por ele
                 .Skip(step * Page)
                 .Take(step)
                 .Include("Photo")
@@ -51,10 +51,10 @@ namespace TesteImpar.Service.Services
         {
             var car = await this.GetCarById(model.Id);
             //updating car
-            car.Name = car.Name;
-            car.Status = car.Status;
-
-            this._repository.Update(model);
+            car.Name = model.Name;
+            car.Status = model.Status;
+            
+            this._repository.Update(car);
             await this._uow.Save();
         }
         public async Task DeleteCar(Car model)
@@ -62,6 +62,7 @@ namespace TesteImpar.Service.Services
             
             await this._repository.Delete(model);
             await this._uow.Save();
+            
         }
 
         public async Task<int> GetQtdPages()

@@ -8,7 +8,7 @@ namespace TesteImpar.Service.Interfaces
 {
     public interface ICarService
     {
-        public Task<List<Car>> ListCarPerPage(int Page = 0, int step = 10);
+        public Task<List<Car>> ListCarPerPage(int Page = 0, int step = 10,string title="");
         public Task InsertCar(Car model);
         public Task UpdateCar(Car model);
         public Task DeleteCar(Car model);

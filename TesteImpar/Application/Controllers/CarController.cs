@@ -51,17 +51,17 @@ namespace TesteImpar.Application.Controllers
             return null;
         }
 
-        
+
 
 
 
         [HttpGet]
-        public async Task<IActionResult> ListCarsPerPage(int page = 0, int step = 10)
+        public async Task<IActionResult> ListCarsPerPage(int page = 0, int step = 10, string title = "")
         {
 
             try
             {
-                var response = await this._carService.ListCarPerPage(page, step);
+                var response = await this._carService.ListCarPerPage(page, step, title);
                 var numPages = await this._carService.GetQtdPages();
                 return StatusCode(200, new ApiResponse()
                 {
@@ -84,13 +84,15 @@ namespace TesteImpar.Application.Controllers
         {
             try
             {
-                var photo = new Photo() { 
-                    Base64 =model.Base64
+                var photo = new Photo()
+                {
+                    Base64 = model.Base64
 
                 };
-                var car = new Car() { 
-                    Name=model.Titulo,
-                    Status=true
+                var car = new Car()
+                {
+                    Name = model.Titulo,
+                    Status = true
                 };
 
 
@@ -120,11 +122,19 @@ namespace TesteImpar.Application.Controllers
             {
 
                 this._uow.BeginTransaction();
-                var carOld=await this._carService.GetCarById(model.IdCar);
-                var photoOld = await this._photoService.GetPhotoById(carOld.PhotoId.Value);
-                carOld.Name = model.Titulo;
-                carOld.Status = model.Status;
-                photoOld.Base64 = model.Base64;
+                Car carOld = new Car()
+                {
+                    Id = model.IdCar,
+                    Name = model.Titulo,
+                    Status = model.Status,
+                    PhotoId = model.IdPhoto
+                };
+                var photoOld = new Photo()
+                {
+                    Base64 = model.Base64,
+                    Id = model.IdPhoto,
+
+                };
                 await this._carService.UpdateCar(carOld);
                 await this._photoService.UpdatePhoto(photoOld);
                 this._uow.Commit();
@@ -139,7 +149,7 @@ namespace TesteImpar.Application.Controllers
                 return StatusCode(400, new ApiResponse()
                 {
                     Message = ex.Message
-                }); 
+                });
 
             }
         }
@@ -173,6 +183,10 @@ namespace TesteImpar.Application.Controllers
                 {
                     Message = ex.Message
                 });
+            }
+            finally
+            {
+                await this._uow.CloseConnection();
             }
 
         }

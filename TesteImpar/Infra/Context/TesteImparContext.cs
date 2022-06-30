@@ -27,6 +27,7 @@ namespace TesteImpar.Context.Infra
             {
 
                 optionsBuilder.UseSqlServer("Data Source=DESKTOP-7OM0BL6\\SQLEXPRESS;Initial Catalog=TesteImpar;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=False");
+                //optionsBuilder.UseSqlServer("Data Source=sql-marcel-nascimento.database.windows.net;Initial Catalog=SQLDB-MARCEL-NASCIMENTO;User ID=adm;Password=4qmXvSSH33aPtzmPKFVCWGjF9cdXQKcp; Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=False");
             }
         }
 

@@ -32,6 +32,7 @@ namespace TesteImpar.Service.Services
         {
             await this._repository.Delete(model);
             await this._uow.Save();
+            
         }
         public async Task<Photo> GetPhotoById(long id)
         {
@@ -42,8 +43,8 @@ namespace TesteImpar.Service.Services
         {
             var p = await this.GetPhotoById(model.Id);
             p.Base64 = model.Base64;
-
-            this._repository.Update(model);
+            p.Cars = null;
+            this._repository.Update(p);
             await this._uow.Save();
                 
         }
